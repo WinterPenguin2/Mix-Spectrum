@@ -51,7 +51,7 @@ You can try other environments easily.
 
 ## Training
 
-MUJOCO_GL='egl' CUDA_VISIBLE_DEVICES=10  python3 src/train.py   --algorithm drq_aug   --seed 0 --tag SRM  --augmentation random_mask_freq; 
+MUJOCO_GL='egl' python3 src/train.py  --domain_name walker --task_name walk --algorithm sac --seed 0 
 
 
 
