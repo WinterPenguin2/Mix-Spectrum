@@ -103,7 +103,7 @@ class ReplayBuffer(object):
 
 		self.idx = 0
 		self.full = False
-
+		self.args=args
 	def add(self, obs, action, reward, next_obs, done):
 		obses = (obs, next_obs)
 		if self.idx >= len(self._obses):
@@ -135,36 +135,34 @@ class ReplayBuffer(object):
 	def sample_soda(self, n=None):
 		idxs = self._get_idxs(n)
 		obs, _ = self._encode_obses(idxs)
-		return torch.as_tensor(obs).cuda().float()
-
-	def sample_curl(self, n=None):
-		idxs = self._get_idxs(n)
-
-		obs, next_obs = self._encode_obses(idxs)
-		obs = torch.as_tensor(obs).cuda().float()
-		next_obs = torch.as_tensor(next_obs).cuda().float()
-		actions = torch.as_tensor(self.actions[idxs]).cuda()
-		rewards = torch.as_tensor(self.rewards[idxs]).cuda()
-		not_dones = torch.as_tensor(self.not_dones[idxs]).cuda()
-
-		pos = augmentations.random_crop(obs.clone())
-		obs = augmentations.random_crop(obs)
-		next_obs = augmentations.random_crop(next_obs)
-
-		return obs, actions, rewards, next_obs, not_dones, pos
+		return torch.as_tensor(obs).to(torch.device("cuda:{}".format(self.args.gpu))).float()
 
 	def sample_drq(self, n=None, pad=4):
 		idxs = self._get_idxs(n)
 
 		obs, next_obs = self._encode_obses(idxs)
-		obs = torch.as_tensor(obs).cuda().float()
-		next_obs = torch.as_tensor(next_obs).cuda().float()
-		actions = torch.as_tensor(self.actions[idxs]).cuda()
-		rewards = torch.as_tensor(self.rewards[idxs]).cuda()
-		not_dones = torch.as_tensor(self.not_dones[idxs]).cuda()
+		obs = torch.as_tensor(obs).to(torch.device("cuda:{}".format(self.args.gpu))).float()
+		next_obs = torch.as_tensor(next_obs).to(torch.device("cuda:{}".format(self.args.gpu))).float()
+		actions = torch.as_tensor(self.actions[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
+		rewards = torch.as_tensor(self.rewards[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
+		not_dones = torch.as_tensor(self.not_dones[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
 
-		obs = augmentations.random_shift(obs, pad)
-		next_obs = augmentations.random_shift(next_obs, pad)
+		obs = augmentations.random_shift(obs, self.args,pad)
+		next_obs = augmentations.random_shift(next_obs,self.args, pad)
+
+		return obs, actions, rewards, next_obs, not_dones
+
+	def sample_svea(self, n=None, pad=4):
+		idxs = self._get_idxs(n)
+
+		obs, next_obs = self._encode_obses(idxs)
+		obs = torch.as_tensor(obs).to(torch.device("cuda:{}".format(self.args.gpu))).float()
+		next_obs = torch.as_tensor(next_obs).to(torch.device("cuda:{}".format(self.args.gpu))).float()
+		actions = torch.as_tensor(self.actions[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
+		rewards = torch.as_tensor(self.rewards[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
+		not_dones = torch.as_tensor(self.not_dones[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
+
+		obs = augmentations.random_shift(obs, self.args,pad)
 
 		return obs, actions, rewards, next_obs, not_dones
 
@@ -172,14 +170,26 @@ class ReplayBuffer(object):
 		idxs = self._get_idxs(n)
 
 		obs, next_obs = self._encode_obses(idxs)
-		obs = torch.as_tensor(obs).cuda().float()
-		next_obs = torch.as_tensor(next_obs).cuda().float()
-		actions = torch.as_tensor(self.actions[idxs]).cuda()
-		rewards = torch.as_tensor(self.rewards[idxs]).cuda()
-		not_dones = torch.as_tensor(self.not_dones[idxs]).cuda()
+		obs = torch.as_tensor(obs).to(torch.device("cuda:{}".format(self.args.gpu))).float()
+		next_obs = torch.as_tensor(next_obs).to(torch.device("cuda:{}".format(self.args.gpu))).float()
+		actions = torch.as_tensor(self.actions[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
+		rewards = torch.as_tensor(self.rewards[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
+		not_dones = torch.as_tensor(self.not_dones[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
 
-		obs = augmentations.random_crop(obs)
-		next_obs = augmentations.random_crop(next_obs)
+		obs = augmentations.random_crop(obs,self.args)
+		next_obs = augmentations.random_crop(next_obs,self.args)
+
+		return obs, actions, rewards, next_obs, not_dones
+
+	def sample_sac(self, n=None):
+		idxs = self._get_idxs(n)
+
+		obs, next_obs = self._encode_obses(idxs)
+		obs = torch.as_tensor(obs).to(torch.device("cuda:{}".format(self.args.gpu))).float()
+		next_obs = torch.as_tensor(next_obs).to(torch.device("cuda:{}".format(self.args.gpu))).float()
+		actions = torch.as_tensor(self.actions[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
+		rewards = torch.as_tensor(self.rewards[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
+		not_dones = torch.as_tensor(self.not_dones[idxs]).to(torch.device("cuda:{}".format(self.args.gpu)))
 
 		return obs, actions, rewards, next_obs, not_dones
 
