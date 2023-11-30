@@ -3,8 +3,8 @@ Spectrum Random Erasing for Generalization in Image-based Reinforcement Learning
 
 
 
-## Setup
-We assume that you have access to a GPU with CUDA >=9.2 support. All dependencies can then be installed with the following commands:
+## Abstract
+Visual Reinforcement Learning (RL) trains agents on policies using raw images, showing potential for real-world applications. However, the limited diversity in training environments often results in overfitting, with agents underperforming in unseen environments due to a notable domain gap. To address challenges in traditional computer vision, image-based augmentation is used to increase data diversity, but its effectiveness is limited in RL tasks due to the intricate relationship between environmental dynamics and visual appearances. We introduce ``Mix-Spectrum,'' a novel frequency-based image augmentation method to enhance the agent's focus on semantic information and improve robustness in unseen environments. The proposed method transforms the image to the Fourier domain and mixes only the amplitudes with the other datasets. This allows for the augmentation of multiple datasets while preserving semantic information for robust generalization in visual reinforcement learning tasks. Through extensive experiments on the DMControl Generalization Benchmark (DMControl-GB), the paper demonstrates that Mix-Spectrum shows superior performance compared to existing methods in zero-shot generalization.
 
 ## Install MuJoCo
 Download the MuJoCo version 2.1 binaries for Linux or OSX.
