@@ -72,7 +72,7 @@ def parse_args():
 	parser.add_argument('--tag', default='default', type=str)
 	parser.add_argument('--fan_angle', default=-1, type=int)
 	parser.add_argument('--augmentation', default='random_mask_freq', type=str)
-
+	parser.add_argument('--gpu',default=0,type=int)
 
 	parser.add_argument('--moving_average_denoise', default=False, action='store_true')
 	parser.add_argument('--moving_average_denoise_factor', default=0.15, type=float)
