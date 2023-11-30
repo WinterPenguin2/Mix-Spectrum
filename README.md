@@ -1,5 +1,4 @@
 # Mix-Spectrum for Generalization in Visual Reinforcement Learning
-Spectrum Random Erasing for Generalization in Image-based Reinforcement Learning
 
 
 
