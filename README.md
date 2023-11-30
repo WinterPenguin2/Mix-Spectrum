@@ -1,4 +1,4 @@
-# SRM
+# Mix-Spectrum for Generalization in Visual Reinforcement Learning
 Spectrum Random Erasing for Generalization in Image-based Reinforcement Learning
 
 
@@ -21,29 +21,6 @@ conda env create -f setup/conda.yml
 conda activate dmcgb
 
 sh setup/install_envs.sh
-
-
-## Install CARLA
-mkdir carla
-
-tar -xvzf CARLA_0.9.9.4.tar.gz -C carla
-
-cd carla/PythonAPI/carla/dist
-
-easy_install carla-0.9.9-py3.7-linux-x86_64.egg
-
-ln -fs carla/CarlaUE4.sh /usr/local/bin/carla-server
-
-
-## Install Robosuite
-pip install robosuite
-
-
-## Install DrawerWorld
-cd src/env/drawerworld
-
-pip install -e .
-
 
 
 
@@ -70,65 +47,12 @@ while not done:
 
 
 You can try other environments easily.
-## Carla Benchmark
-from env.carla import make_carla
-env = make_carla(
-    map_name=args.task_name,
-    client_port=29000,  
-    npc_vehicles_port=29008,  
-    modalities = ["rgb",],  
-    frame_stack=3,  
-    weather = 'clear_noon',  
-    action_repeat=args.action_repeat,  
-    seed=args.seed  
-)
 
-
-## Robosuite Benchmark
-from env.robosuite import make_robosuite  
-env = make_robosuite(  
-    task=args.task_name,  
-    mode="train",  
-    scene_id=0,  
-)  
-
-## DrawerWorld Benchmark
-from env.metaworld_wrappers import make_pad_env  
-env = make_pad_env(  
-        domain_name=args.domain_name,  
-        task_name=args.task_name,  
-        seed=args.seed,  
-        episode_length=args.episode_length,  
-        action_repeat=args.action_repeat,  
-        mode='train',  
-        action_factor=args.action_factor,  
-        moving_average_denoise=args.moving_average_denoise,  
-        moving_average_denoise_factor=args.moving_average_denoise_factor,  
-        moving_average_denoise_alpha=args.moving_average_denoise_alpha,  
-        exponential_moving_average=args.exponential_moving_average  
-)
 
 
 ## Training
 
 MUJOCO_GL='egl' CUDA_VISIBLE_DEVICES=10  python3 src/train.py   --algorithm drq_aug   --seed 0 --tag SRM  --augmentation random_mask_freq; 
 
-
-
-
-## BibTex:
-
-If you find this survey useful for your research, please cite the following papers:
-
-```bibtex
-@article{huang2022spectrum,  
-  title={Spectrum Random Masking for Generalization in Image-based Reinforcement Learning},  
-  author={Huang, Yangru and Peng, Peixi and Zhao, Yifan and Chen, Guangyao and Tian, Yonghong},  
-  journal={Advances in Neural Information Processing Systems},  
-  volume={35},  
-  pages={20393--20406},  
-  year={2022}  
-}  
-```
 
 
